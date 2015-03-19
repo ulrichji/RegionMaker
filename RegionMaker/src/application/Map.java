@@ -105,7 +105,7 @@ public class Map
 			}
 		}
 	}
-	//Returnerer bildet mellom 
+	//Returnerer bildet i rektangelet generert av parameterne
 	//TODO Throw exception
 	public int[][]subMap(int x1,int y1,int width,int height)
 	{
