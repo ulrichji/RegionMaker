@@ -1,8 +1,12 @@
 package application;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Random;
 
 public class Map
 {
@@ -49,6 +53,57 @@ public class Map
 		}
 		return String.copyValueOf(str);
 	}
+	
+	public BufferedImage getDrawableMap(int width,int height)
+	{
+		BufferedImage image=new BufferedImage(width,height,BufferedImage.TYPE_BYTE_GRAY);
+		int maxVal=getHighestPoint();
+		int minVal=getLowestPoint();
+		int mapHeight=maxVal-minVal;
+		double scaleWidthFactor=(double)getWidth()/width;
+		double scaleHeightFactor=(double)getHeight()/height;
+		for(int i=0;i<width;i++)
+		{
+			for(int u=0;u<height;u++)
+			{
+				double x=i*scaleWidthFactor;
+				double y=u*scaleHeightFactor;
+				
+				int value=(int)(((double)(map[(int)x][(int)y]-minVal)/mapHeight)*255);
+				
+				image.setRGB(i,u,new Color(value,value,value).getRGB());
+			}
+		}
+		
+		return image;
+	}
+	
+	private int getLowestPoint()
+	{
+		int lowestPoint=Integer.MAX_VALUE;
+		for(int i=0;i<map.length;i++)
+		{
+			for(int u=0;u<map[i].length;u++)
+			{
+				if(map[i][u]<lowestPoint)
+					lowestPoint=map[i][u];
+			}
+		}
+		return lowestPoint;
+	}
+	private int getHighestPoint()
+	{
+		int highestPoint=Integer.MIN_VALUE;
+		for(int i=0;i<map.length;i++)
+		{
+			for(int u=0;u<map[i].length;u++)
+			{
+				if(map[i][u]>highestPoint)
+					highestPoint=map[i][u];
+			}
+		}
+		return highestPoint;
+	}
 	//TODO throw exception
 	public void loadMap(String path) throws IOException
 	{
@@ -85,9 +140,8 @@ public class Map
 			{
 				//Parse neste tall
 				int number=Integer.parseInt(substring(block,offset,offset+6).trim());
-				//Konverter fra decimeter til meter. Dette går fint da høydeoppløsningen på Simcity er 3 meter
-				//TODO fiks konverteringen utfra verdier i metadata
-				map[i][columnSize-1-count]=(number+5)/10;
+				//legg inn data i map
+				map[i][columnSize-1-count]=number;
 				//Øk offsett for å finne når neste tall starter
 				offset+=6;
 				count++;
