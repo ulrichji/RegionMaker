@@ -5,7 +5,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar prefHeight="24.0" prefWidth="600.0">
@@ -20,18 +19,18 @@
                <items>
                   <Menu mnemonicParsing="false" text="Game">
                     <items>
-                      <MenuItem mnemonicParsing="false" text="Cities: Skylines" />
-                        <MenuItem mnemonicParsing="false" text="Sim City 4" />
+                        <CheckMenuItem onAction="#selectSkylines" fx:id="cmi_skylines" mnemonicParsing="false" text="Cities: Skylines" />
+                        <CheckMenuItem onAction="#selectSC4" fx:id="cmi_sc4" mnemonicParsing="false" text="Sim City 4" />
                     </items>
                   </Menu>
                </items>
           </Menu>
         </menus>
       </MenuBar>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0">
-         <content>
-            <ImageView pickOnBounds="true" preserveRatio="true" />
-         </content>
+      <ScrollPane fx:id="sp_scrollPane" prefWidth="1000" prefHeight="600">
+        <content>
+          <AnchorPane fx:id="ap_map" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+        </content>
       </ScrollPane>
    </children>
 </VBox>
