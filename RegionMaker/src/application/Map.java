@@ -54,30 +54,39 @@ public class Map
 		return String.copyValueOf(str);
 	}
 	
+	//a light function to get an image. The interpolation is not good, but it is sufficient for drawing in the view
 	public BufferedImage getDrawableMap(int width,int height)
 	{
+		//the image to return
 		BufferedImage image=new BufferedImage(width,height,BufferedImage.TYPE_BYTE_GRAY);
+		//the highest and lowest point on the map
 		int maxVal=getHighestPoint();
 		int minVal=getLowestPoint();
+		//the difference between lowest and highets point
 		int mapHeight=maxVal-minVal;
+		//the ratio between the maps dimensions and the parameter dimensions
 		double scaleWidthFactor=(double)getWidth()/width;
 		double scaleHeightFactor=(double)getHeight()/height;
+		//loop through the image and draw each pixel according to the map.
 		for(int i=0;i<width;i++)
 		{
 			for(int u=0;u<height;u++)
 			{
+				//the coordinate on the map
 				double x=i*scaleWidthFactor;
 				double y=u*scaleHeightFactor;
 				
+				//the grayscale value of the pixel
 				int value=(int)(((double)(map[(int)x][(int)y]-minVal)/mapHeight)*255);
 				
+				//draw the pixel
 				image.setRGB(i,u,new Color(value,value,value).getRGB());
 			}
 		}
-		
+		//return.
 		return image;
 	}
-	
+	//returns the lowest point in this map
 	private int getLowestPoint()
 	{
 		int lowestPoint=Integer.MAX_VALUE;
@@ -91,6 +100,7 @@ public class Map
 		}
 		return lowestPoint;
 	}
+	//returns the hightes point in this map.
 	private int getHighestPoint()
 	{
 		int highestPoint=Integer.MIN_VALUE;
@@ -104,7 +114,7 @@ public class Map
 		}
 		return highestPoint;
 	}
-	//TODO throw exception
+	//Loads this map from the file at the given path
 	public void loadMap(String path) throws IOException
 	{
 		File f=new File(path);
@@ -172,12 +182,14 @@ public class Map
 		}
 		return image;
 	}
+	//sets this map with the given coordinates
 	public void setMap(int[][]map)
 	{
 		this.map=map;
 		this.width=map.length;
 		this.height=map[0].length;
 	}
+	//returns the int array that represents the map
 	public int[][]getMap()
 	{
 		return map;
