@@ -85,7 +85,7 @@ public class MainWindowController
 		BufferedImage img=map.getDrawableMap(1024,1024);
 		WritableImage fxImage=new WritableImage(1024,1024);
 		fxImage=SwingFXUtils.toFXImage(img,fxImage);
-		mapView.setImage(fxImage);
+		mapView.setImage(map,fxImage);
 	}
 	
 	private class WidthListener implements ChangeListener<Number>
