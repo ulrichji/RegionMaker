@@ -55,7 +55,7 @@ public class SkylinesExporter
 		for(int i=0;i<saveMap.length;i++)
 		{
 			//How much the height of the subsection is relative to the map we want to save.
-			double scaleY=positions[(int)(scaleX*i)].length/saveMap[i].length;
+			double scaleY=(double)positions[(int)(scaleX*i)].length/saveMap[i].length;
 			for(int u=0;u<saveMap[i].length;u++)
 			{
 				//if we need to make the map bigger. Use bilinear interpolation.

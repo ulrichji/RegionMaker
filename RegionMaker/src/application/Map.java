@@ -15,7 +15,7 @@ public class Map
 	//oppløsningen i x- og y-retning
 	private double resx,resy;
 	private int width, height;
-	private double oceanAngle=30;
+	private double oceanAngle=15;
 	public Map()
 	{
 	}
@@ -130,7 +130,6 @@ public class Map
 		height=width;//TODO Fiks noe av dette, dette trenger ikke å stemme
 		resx=Double.parseDouble(substring(block,816,816+12).trim());
 		resy=Double.parseDouble(substring(block,828,828+12).trim());
-		
 		//lag kartdata
 		map=new int[width][height];
 		
