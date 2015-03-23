@@ -66,4 +66,13 @@ public class SkylinesSelectionShape extends ImageView
 		//set the image to this imageview
 		this.setImage(fxImage);
 	}
+	
+	public double getWidth()
+	{
+		return width;
+	}
+	public double getHeight()
+	{
+		return height;
+	}
 }

@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.LinkedList;
 
 public class Map
 {
@@ -14,6 +15,7 @@ public class Map
 	//oppløsningen i x- og y-retning
 	private double resx,resy;
 	private int width, height;
+	private double oceanAngle=30;
 	public Map()
 	{
 	}
@@ -191,5 +193,57 @@ public class Map
 	public int[][]getMap()
 	{
 		return map;
+	}
+	
+	public void generateOceans()
+	{
+		int seaLevel=4;
+		System.out.println(getLowestPoint());
+		// Generer hav
+		boolean[][] visited=new boolean[this.getWidth()][this.getHeight()];
+		LinkedList<Point> l=new LinkedList<Point>();
+		int[][]map=this.getMap();
+		double steepnessfactor=(Math.sin(oceanAngle*0.0174532925)*this.getXResolution())/3D;
+		for(int i=0;i<visited.length;i++)
+		{
+			for(int u=0;u<visited.length;u++)
+			{
+				if(map[i][u]>seaLevel)
+				{
+					visited[i][u]=true;
+					for(int j=i-1;j<=i+1;j++)
+					{
+						for(int k=u-1;k<=u+1;k++)
+						{
+							if(!(k==u&&j==i)&&j<this.getWidth()&&j>=0&&k<this.getHeight()&&k>=0&&visited[j][k]==false&&map[j][k]<=seaLevel)
+							{
+								visited[j][k]=true;
+								double dist=Math.sqrt((double)((i-j)*(i-j))+(double)((u-k)*(u-k)))*steepnessfactor;
+								l.add(new Point(j,k,0-dist));
+							}
+						}
+					}
+				}
+			}
+		}
+		// Gå gjennom køen og bruk samme prosedyre som over for hvert punkt.
+		while(!l.isEmpty())
+		{
+			Point p=l.poll();
+			for(int j=p.x-1;j<=p.x+1;j++)
+			{
+				for(int k=p.y-1;k<=p.y+1;k++)
+				{
+					if(!(k==p.y&&j==p.x)&&j<this.getWidth()&&j>=0&&k<this.getHeight()&&k>=0&&visited[j][k]==false&&map[j][k]<=seaLevel)
+					{
+						visited[j][k]=true;
+						double dist=Math.sqrt((double)((p.x-j)*(p.x-j)*getXResolution())+(double)((p.y-k)*(p.y-k))*getYResolution())*steepnessfactor;
+						map[j][k]=(int)(p.depth-dist);
+						l.add(new Point(j,k,p.depth-dist));
+					}
+				}
+			}
+		}
+		System.out.println(getLowestPoint());
 	}
 }

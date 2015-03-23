@@ -12,6 +12,7 @@
           <Menu mnemonicParsing="false" text="File">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open .dem file" />
+                  <MenuItem fx:id="mi_export" mnemonicParsing="false" onAction="#export" text="Export" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
@@ -19,15 +20,16 @@
                <items>
                   <Menu mnemonicParsing="false" text="Game">
                     <items>
-                        <CheckMenuItem onAction="#selectSkylines" fx:id="cmi_skylines" mnemonicParsing="false" text="Cities: Skylines" />
-                        <CheckMenuItem onAction="#selectSC4" fx:id="cmi_sc4" mnemonicParsing="false" text="Sim City 4" />
+                        <CheckMenuItem fx:id="cmi_skylines" mnemonicParsing="false" onAction="#selectSkylines" text="Cities: Skylines" />
+                        <CheckMenuItem fx:id="cmi_sc4" mnemonicParsing="false" onAction="#selectSC4" text="Sim City 4" />
                     </items>
                   </Menu>
+                  <MenuItem onAction="#generateOceans" mnemonicParsing="false" text="Generate oceans" />
                </items>
           </Menu>
         </menus>
       </MenuBar>
-      <ScrollPane fx:id="sp_scrollPane" prefWidth="1000" prefHeight="600">
+      <ScrollPane fx:id="sp_scrollPane" prefHeight="600" prefWidth="1000">
         <content>
           <AnchorPane fx:id="ap_map" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
         </content>

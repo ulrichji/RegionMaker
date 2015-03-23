@@ -1,5 +1,6 @@
 package application;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
@@ -25,6 +27,7 @@ public class MainWindowController
 	@FXML private CheckMenuItem cmi_sc4;
 	@FXML private AnchorPane ap_map;
 	@FXML private ScrollPane sp_scrollPane;
+	@FXML private MenuItem mi_export;
 	
 	private GameState gameState;
 	private MapView mapView;
@@ -37,6 +40,8 @@ public class MainWindowController
 		//want the anchorpane in the scrollview to resize to the map
 		mapView.widthProperty().addListener(new WidthListener(ap_map));
 		mapView.heightProperty().addListener(new HeightListener(ap_map));
+		
+		mi_export.setDisable(true);
 	}
 	
 	@FXML private void selectSkylines()
@@ -66,8 +71,28 @@ public class MainWindowController
 		//if there is a file, try to open it.
         if (file != null) {
             openFile(file.getAbsolutePath());
+            mi_export.setDisable(false);
         }
-
+	}
+	
+	@FXML private void export()
+	{
+		SelectionRectangle selection=mapView.getSelection();
+		double selectionSizeX=selection.getWidth();
+		double selectionSizeY=selection.getHeight();
+		double selectionX=(selection.getX()/1024)*(map.getRealWidth());
+		double selectionY=(selection.getY()/1024)*(map.getRealHeight());
+		SkylinesExporter exporter=new SkylinesExporter(map,
+				new SelectionRectangle(selectionX,selectionY,selectionSizeX,selectionSizeY));
+		
+		exporter.selectFile();
+		exporter.export();
+	}
+	
+	@FXML public void generateOceans()
+	{
+		map.generateOceans();
+		setImage(map.getDrawableMap(1024,1024));
 	}
 	
 	public void openFile(String path)
@@ -82,7 +107,12 @@ public class MainWindowController
 		{
 			e.printStackTrace();
 		}
-		BufferedImage img=map.getDrawableMap(1024,1024);
+		setImage(map.getDrawableMap(1024,1024));
+	}
+	
+	private void setImage(BufferedImage img)
+	{
+		
 		WritableImage fxImage=new WritableImage(1024,1024);
 		fxImage=SwingFXUtils.toFXImage(img,fxImage);
 		mapView.setImage(map,fxImage);
