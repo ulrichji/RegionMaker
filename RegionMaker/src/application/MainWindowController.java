@@ -1,6 +1,5 @@
 package application;
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +28,7 @@ public class MainWindowController
 	@FXML private ScrollPane sp_scrollPane;
 	@FXML private MenuItem mi_export;
 	
+	//gamestate is used to select what game to export to.
 	private GameState gameState;
 	private MapView mapView;
 	
@@ -41,6 +41,7 @@ public class MainWindowController
 		mapView.widthProperty().addListener(new WidthListener(ap_map));
 		mapView.heightProperty().addListener(new HeightListener(ap_map));
 		
+		//wait for the map to load in order to enable exporting.
 		mi_export.setDisable(true);
 	}
 	
@@ -71,27 +72,35 @@ public class MainWindowController
 		//if there is a file, try to open it.
         if (file != null) {
             openFile(file.getAbsolutePath());
+            //map is now loaded. We can now enable exporting.
             mi_export.setDisable(false);
         }
 	}
 	
 	@FXML private void export()
 	{
+		//get a rectangle of where the figure is in pixel on screen and width in meters.
 		SelectionRectangle selection=mapView.getSelection();
+		//the width and height of the rectangle in meters.
 		double selectionSizeX=selection.getWidth();
 		double selectionSizeY=selection.getHeight();
+		//the x and y position of the selected area in meters.
 		double selectionX=(selection.getX()/1024)*(map.getRealWidth());
 		double selectionY=(selection.getY()/1024)*(map.getRealHeight());
+		//create a new Exporter object.
 		SkylinesExporter exporter=new SkylinesExporter(map,
 				new SelectionRectangle(selectionX,selectionY,selectionSizeX,selectionSizeY));
-		
+		//Use the objects filechooser to select the file.
 		exporter.selectFile();
+		//export the file.
 		exporter.export();
 	}
 	
+	//generate the oceans. This should be improved.
 	@FXML public void generateOceans()
 	{
-		map.generateOceans();
+		map.generateOceans(4);//FIXME should be possible for user to specify the height of the ocean.
+		//refresh the image.
 		setImage(map.getDrawableMap(1024,1024));
 	}
 	
@@ -107,14 +116,16 @@ public class MainWindowController
 		{
 			e.printStackTrace();
 		}
+		//update the image in the view.
 		setImage(map.getDrawableMap(1024,1024));
 	}
 	
 	private void setImage(BufferedImage img)
 	{
-		
+		//create a new image with the dimensions. These dimensions does not represent the dimensions of the map
 		WritableImage fxImage=new WritableImage(1024,1024);
 		fxImage=SwingFXUtils.toFXImage(img,fxImage);
+		//update the image in the view.
 		mapView.setImage(map,fxImage);
 	}
 	

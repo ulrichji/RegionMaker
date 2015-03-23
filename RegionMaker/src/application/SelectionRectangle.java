@@ -1,5 +1,6 @@
 package application;
 
+//a simple class to store x,y and width and height.
 public class SelectionRectangle
 {
 	private double x,y,width,height;

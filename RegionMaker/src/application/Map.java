@@ -194,31 +194,41 @@ public class Map
 	{
 		return map;
 	}
-	
-	public void generateOceans()
+	//generate oceans on all points lower or equal to the seaLevel parameter
+	public void generateOceans(int seaLevel)
 	{
-		int seaLevel=4;
-		System.out.println(getLowestPoint());
-		// Generer hav
+		//the visited pixels
 		boolean[][] visited=new boolean[this.getWidth()][this.getHeight()];
+		//Using breath first search. A queue to store the next pixels to add.
 		LinkedList<Point> l=new LinkedList<Point>();
+		//The coordinates of the pixels.
 		int[][]map=this.getMap();
-		double steepnessfactor=(Math.sin(oceanAngle*0.0174532925)*this.getXResolution())/3D;
+		//the difference in height between each pixel. That is the angle of the ocean bed.
+		double steepnessfactor=(Math.sin(oceanAngle*0.0174532925)*this.getXResolution());
+		//loop through all the points in the map
 		for(int i=0;i<visited.length;i++)
 		{
 			for(int u=0;u<visited.length;u++)
 			{
+				//If the point is higher than the specified sealevel, we want to look for oceanpixels next to it
 				if(map[i][u]>seaLevel)
 				{
+					//this pixel is visited because it is on land.
 					visited[i][u]=true;
+					//loop through the neighbours of the pixel
 					for(int j=i-1;j<=i+1;j++)
 					{
 						for(int k=u-1;k<=u+1;k++)
 						{
-							if(!(k==u&&j==i)&&j<this.getWidth()&&j>=0&&k<this.getHeight()&&k>=0&&visited[j][k]==false&&map[j][k]<=seaLevel)
+							//Check if the coordinate is not self and a valid coordinate. If it is below sealevel, add it to the queue.
+							if(!(k==u && j==i) && j<this.getWidth() && j>=0 && k<this.getHeight() && k>=0 && visited[j][k]==false && map[j][k]<=seaLevel)
 							{
+								//the pixel below sealevel is visited.
 								visited[j][k]=true;
+								//Decrease the height of the pixel based on the distance to the visited pixel at map[i][u]
+								//that is Euclidian distance.
 								double dist=Math.sqrt((double)((i-j)*(i-j))+(double)((u-k)*(u-k)))*steepnessfactor;
+								//add the discovered pixel to the queue. We want to decrease the height of the next pixel we find.
 								l.add(new Point(j,k,0-dist));
 							}
 						}
@@ -226,24 +236,30 @@ public class Map
 				}
 			}
 		}
-		// Gå gjennom køen og bruk samme prosedyre som over for hvert punkt.
+		//loop through the queue and repeat the procedure as over.
 		while(!l.isEmpty())
 		{
+			//the position of the first pixel in the queue.
 			Point p=l.poll();
+			//loop through all the neighbours of the pixel
 			for(int j=p.x-1;j<=p.x+1;j++)
 			{
 				for(int k=p.y-1;k<=p.y+1;k++)
 				{
-					if(!(k==p.y&&j==p.x)&&j<this.getWidth()&&j>=0&&k<this.getHeight()&&k>=0&&visited[j][k]==false&&map[j][k]<=seaLevel)
+					//if the neighbour pixel is not visited, a valid coordinate and below sealevel. It will be added to the queue to be visited later.
+					if(!(k==p.y&&j==p.x) && j<this.getWidth() && j>=0 && k<this.getHeight() && k>=0 && visited[j][k]==false && map[j][k]<=seaLevel)
 					{
+						//the ocean pixel is visited.
 						visited[j][k]=true;
+						//we want to decrease the height relative to the angle of the slope and the distance to the pixel.
 						double dist=Math.sqrt((double)((p.x-j)*(p.x-j)*getXResolution())+(double)((p.y-k)*(p.y-k))*getYResolution())*steepnessfactor;
+						//decrease the height of the pixel
 						map[j][k]=(int)(p.depth-dist);
+						//add the ocean pixel to the queue to visit it later.
 						l.add(new Point(j,k,p.depth-dist));
 					}
 				}
 			}
 		}
-		System.out.println(getLowestPoint());
 	}
 }
