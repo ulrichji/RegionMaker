@@ -204,7 +204,7 @@ public class Map
 		//The coordinates of the pixels.
 		int[][]map=this.getMap();
 		//the difference in height between each pixel. That is the angle of the ocean bed.
-		double steepnessfactor=(Math.sin(oceanAngle*0.0174532925)*this.getXResolution());
+		double steepnessfactor=(Math.sin(oceanAngle*0.0174532925)*this.getXResolution())*10; //FIXME the *10 is used because the date is in decimeters. This should not go here
 		//loop through all the points in the map
 		for(int i=0;i<visited.length;i++)
 		{

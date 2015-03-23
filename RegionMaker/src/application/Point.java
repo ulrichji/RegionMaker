@@ -1,5 +1,6 @@
 package application;
 
+//a simple clss to store a 3D point.
 public class Point
 {
 	public int x,y;
