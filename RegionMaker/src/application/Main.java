@@ -12,7 +12,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			FXMLLoader loader=new FXMLLoader();
-			loader.setController(new MainWindowController());
+			loader.setController(new MainWindowController(primaryStage));
 			VBox root=(VBox)loader.load(this.getClass().getResourceAsStream("window.fxml"));
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
