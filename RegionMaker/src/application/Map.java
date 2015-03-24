@@ -23,10 +23,28 @@ public class Map
 	{
 		return resx*width;
 	}
+	
 	public double getRealHeight()
 	{
 		return resy*height;
 	}
+	
+	public void setResx(double resx) {
+		this.resx = resx;
+	}
+	
+	public void setResy(double resy) {
+		this.resy = resy;
+	}
+	
+	public void setWidth(int width) {
+		this.width = width;
+	}
+	
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	
 	public double getXResolution()
 	{
 		return resx;
@@ -42,16 +60,6 @@ public class Map
 	public int getHeight()
 	{
 		return height;
-	}
-	//Returnerer en string som tilsvarer bokstavene mellom start og stopp. Gjør også konverteringen fra bytes til chars
-	private String substring(byte[]a,int start,int stop)
-	{
-		char[]str=new char[stop-start];
-		for(int i=0;i<stop-start;i++)
-		{
-			str[i]=(char)a[i+start];
-		}
-		return String.copyValueOf(str);
 	}
 	
 	//a light function to get an image. The interpolation is not good, but it is sufficient for drawing in the view
@@ -114,60 +122,7 @@ public class Map
 		}
 		return highestPoint;
 	}
-	//Loads this map from the file at the given path
-	public void loadMap(String path) throws IOException
-	{
-		File f=new File(path);
-		@SuppressWarnings("resource")
-		FileInputStream fStream=new FileInputStream(f);
-		//første blokk er metadata og hver blokk består av 1024 bytes
-		byte[]block=new byte[1024];
-		//legger verdier fra streamen i block tilsvarende størrelsen til block
-		fStream.read(block);
-		
-		//For å sjekke metadataen kan du lese spesifikasjonen på nettet
-		width=Integer.parseInt(substring(block,853+7,853+7+6).trim());
-		height=width;//TODO Fiks noe av dette, dette trenger ikke å stemme
-		resx=Double.parseDouble(substring(block,816,816+12).trim());
-		resy=Double.parseDouble(substring(block,828,828+12).trim());
-		//lag kartdata
-		map=new int[width][height];
-		
-		for(int i=0;i<width;i++)
-		{
-			//Les neste blokk
-			fStream.read(block);
-			//størrelsen på denne blokken
-			int columnSize=Integer.parseInt(substring(block,12,18).trim());
-			int dataCount=Math.min(columnSize,146);
-			int dataLeft=columnSize;
-			//144 bytes av kartdaten er metadata til blokken. Start etter dette.
-			int offset=144;
-			int count=0;
-			int count2=0;
-			while(dataLeft>0)
-			{
-				//Parse neste tall
-				int number=Integer.parseInt(substring(block,offset,offset+6).trim());
-				//legg inn data i map
-				map[i][columnSize-1-count]=number;
-				//Øk offsett for å finne når neste tall starter
-				offset+=6;
-				count++;
-				count2++;
-				dataLeft--;
-				//Dersom vi er ferdig med en blokk uten å være ferdig med kolonnen
-				if(count2>=dataCount && dataLeft!=0)
-				{
-					//Siden det er flere tall på en kolonne enn det er plass til i en blokk vil det være plass til 170 datapunkter i en blokk som kommer etter første blokk i en kolonne
-					dataCount=Math.min(170,dataLeft);
-					offset=0;
-					count2=0;
-					fStream.read(block);
-				}
-			}
-		}
-	}
+	
 	//Returnerer bildet i rektangelet generert av parameterne
 	//TODO Throw exception
 	public int[][]subMap(int x1,int y1,int width,int height)
