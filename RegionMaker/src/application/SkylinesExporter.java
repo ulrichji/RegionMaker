@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 
-public class SkylinesExporter
+public class SkylinesExporter implements HeightmapExporter
 {
 	private Map map;
 	private SelectionRectangle rectangle;

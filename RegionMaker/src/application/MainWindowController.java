@@ -88,8 +88,19 @@ public class MainWindowController
 		double selectionX=(selection.getX()/1024)*(map.getRealWidth());
 		double selectionY=(selection.getY()/1024)*(map.getRealHeight());
 		//create a new Exporter object.
-		SkylinesExporter exporter=new SkylinesExporter(map,
+		HeightmapExporter exporter=null;
+		switch(gameState)
+		{
+		case SKYLINES:
+			exporter=new SkylinesExporter(map,
 				new SelectionRectangle(selectionX,selectionY,selectionSizeX,selectionSizeY));
+			break;
+		
+		case SC4:
+			//TODO implement sc4 exporter
+			break;
+		}
+		
 		//Use the objects filechooser to select the file.
 		exporter.selectFile();
 		//export the file.

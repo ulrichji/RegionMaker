@@ -15,7 +15,7 @@ public class Map
 	//oppløsningen i x- og y-retning
 	private double resx,resy;
 	private int width, height;
-	private double oceanAngle=15;
+	private double oceanAngle=5;
 	public Map()
 	{
 	}
