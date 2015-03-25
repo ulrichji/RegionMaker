@@ -12,7 +12,7 @@ public class MapView extends Pane
 	//the image of the map
 	private ImageView mapImage;
 	
-	private SkylinesSelectionShape selectionShape;
+	private SelectionShape selectionShape;
 	private boolean moveMouse=true;
 	
 	private double imageResX=0,imageResY=0;
@@ -25,9 +25,11 @@ public class MapView extends Pane
 		this.setOnMouseMoved(new ShapeMover());
 		//the listener used to lock the selection.
 		this.setOnMouseClicked(new ClickListener());
+		mapImage=new ImageView();
+		this.getChildren().add(mapImage);
 	}
 	
-	public void setImage(Map map,WritableImage fxImage)
+	public void setImage(WritableImage fxImage)
 	{
 		//Update the imageview.
 		this.mapImage.setImage(fxImage);
@@ -36,10 +38,12 @@ public class MapView extends Pane
 		this.imageResY=fxImage.getHeight();
 		this.setWidth(fxImage.getWidth());
 		this.setHeight(fxImage.getHeight());
-		//Create a new selectionShape based on the new image.
-		selectionShape=new SkylinesSelectionShape(map,fxImage.getWidth(),fxImage.getHeight());	
-		
+	}
+	
+	public void setSelectionShape(SelectionShape shape)
+	{
 		this.getChildren().clear();
+		this.selectionShape=shape;
 		this.getChildren().addAll(mapImage,selectionShape);
 	}
 	

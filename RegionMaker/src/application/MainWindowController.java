@@ -144,6 +144,7 @@ public class MainWindowController
 				
 				//Update the image in the view
 				setImage(map.getDrawableMap(1024,1024));
+				mapView.setSelectionShape(new SkylinesSelectionShape(map,1024,1024));
 				
 				//Close the progressbar and enable export
 				progress_dialog.close();
@@ -173,7 +174,7 @@ public class MainWindowController
 		WritableImage fxImage=new WritableImage(1024,1024);
 		fxImage=SwingFXUtils.toFXImage(img,fxImage);
 		//update the image in the view.
-		mapView.setImage(map,fxImage);
+		mapView.setImage(fxImage);
 	}
 	
 	private class WidthListener implements ChangeListener<Number>

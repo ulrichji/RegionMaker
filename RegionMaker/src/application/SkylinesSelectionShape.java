@@ -5,10 +5,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 
-public class SkylinesSelectionShape extends ImageView
+public class SkylinesSelectionShape extends SelectionShape
 {
 	private double width=18000;
 	private double height=18000;

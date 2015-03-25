@@ -13,7 +13,7 @@ public class Map
 	private double resx,resy,resz;
 	private int width, height;
 	//the slope of the seabed in degrees
-	private double oceanAngle=30;
+	private double oceanAngle=1;
 	public Map()
 	{
 	}
@@ -164,7 +164,6 @@ public class Map
 		int[][]map=this.getMap();
 		//the difference in height between each pixel. That is the angle of the ocean bed.
 		double steepnessfactor=(Math.tan(oceanAngle*0.0174532925)*this.getXResolution())/this.getZResolution();
-		System.out.println(steepnessfactor);
 		//loop through all the points in the map
 		for(int i=0;i<visited.length;i++)
 		{
@@ -212,7 +211,7 @@ public class Map
 						//the ocean pixel is visited.
 						visited[j][k]=true;
 						//we want to decrease the height relative to the angle of the slope and the distance to the pixel.
-						double dist=Math.sqrt((double)((p.x-j)*(p.x-j)*getXResolution())+(double)((p.y-k)*(p.y-k))*getYResolution())*steepnessfactor;
+						double dist=Math.sqrt((double)((p.x-j)*(p.x-j))+(double)((p.y-k)*(p.y-k)))*steepnessfactor;
 						//decrease the height of the pixel
 						map[j][k]=(int)(p.depth-dist);
 						//add the ocean pixel to the queue to visit it later.
