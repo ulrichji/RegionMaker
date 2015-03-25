@@ -2,9 +2,6 @@ package application;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.LinkedList;
 
 public class Map
@@ -12,10 +9,11 @@ public class Map
 	//TODO legg til mer metadata som hører til filformatet for å gjøre klassen mer generell
 	//Kartdata som en 2d tabell
 	private int[][]map;
-	//oppløsningen i x- og y-retning
-	private double resx,resy;
+	//oppløsningen i x- ,y- , og z-retning
+	private double resx,resy,resz;
 	private int width, height;
-	private double oceanAngle=5;
+	//the slope of the seabed in degrees
+	private double oceanAngle=30;
 	public Map()
 	{
 	}
@@ -36,7 +34,10 @@ public class Map
 	public void setResy(double resy) {
 		this.resy = resy;
 	}
-	
+	public void setResz(double resz)
+	{
+		this.resz=resz;
+	}
 	public void setWidth(int width) {
 		this.width = width;
 	}
@@ -52,6 +53,10 @@ public class Map
 	public double getYResolution()
 	{
 		return resy;
+	}
+	public double getZResolution()
+	{
+		return resz;
 	}
 	public int getWidth()
 	{
@@ -158,7 +163,8 @@ public class Map
 		//The coordinates of the pixels.
 		int[][]map=this.getMap();
 		//the difference in height between each pixel. That is the angle of the ocean bed.
-		double steepnessfactor=(Math.sin(oceanAngle*0.0174532925)*this.getXResolution())*10; //FIXME the *10 is used because the date is in decimeters. This should not go here
+		double steepnessfactor=(Math.tan(oceanAngle*0.0174532925)*this.getXResolution())/this.getZResolution();
+		System.out.println(steepnessfactor);
 		//loop through all the points in the map
 		for(int i=0;i<visited.length;i++)
 		{

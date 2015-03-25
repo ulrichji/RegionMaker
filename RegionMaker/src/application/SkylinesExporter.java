@@ -15,7 +15,9 @@ public class SkylinesExporter implements HeightmapExporter
 	private Map map;
 	private SelectionRectangle rectangle;
 	private File file;
+	//The depth of the ocean in meters
 	private double seaLevel=40;
+	//the maximum height of the map in meters
 	private double maxHeight=1024-seaLevel;
 	public SkylinesExporter(Map map, SelectionRectangle selectionRectangle)
 	{
@@ -109,7 +111,7 @@ public class SkylinesExporter implements HeightmapExporter
 			for(int u=0;u<saveMap[i].length;u++)
 			{
 				//Convert the mapdata to meters and increase the height according to sealevel.
-				double value=((double)saveMap[i][u]/10)+seaLevel; //FIXME Conversion to meters from desimeters. Should not go here
+				double value=((double)saveMap[i][u]*map.getZResolution())+seaLevel;
 				//Clipping, and high areas are set to maxValue
 				if(value>maxHeight)
 					value=maxHeight;

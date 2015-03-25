@@ -40,6 +40,7 @@ public class MapLoadTask extends Task<Map> {
 		map.setHeight(map.getWidth()); //TODO Fiks noe av dette, dette trenger ikke å stemme
 		map.setResx(Double.parseDouble(substring(block,816,816+12).trim()));
 		map.setResy(Double.parseDouble(substring(block,828,828+12).trim()));
+		map.setResz(Double.parseDouble(substring(block,840,840+12).trim()));
 		//lag kartdata
 		map.setMap(new int[map.getWidth()][map.getHeight()]);
 		
