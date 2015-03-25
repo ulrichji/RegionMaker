@@ -6,7 +6,9 @@ import java.io.IOException;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
@@ -32,6 +34,17 @@ public class MainWindowController
 	private GameState gameState;
 	private MapView mapView;
 	
+	//We want to keep track of the stage this controller is running on so we can modify it from the controller
+	private Stage associatedStage;
+	
+	//Variables associated with tasks have to be declared outside local scope
+	MapLoadTask load_task;
+	ProgressBarDialog progress_dialog;
+	
+	public MainWindowController(Stage associatedStage) {
+		this.associatedStage = associatedStage;
+	}
+
 	public void initialize()
 	{
 		selectSkylines();
@@ -72,8 +85,7 @@ public class MainWindowController
 		//if there is a file, try to open it.
         if (file != null) {
             openFile(file.getAbsolutePath());
-            //map is now loaded. We can now enable exporting.
-            mi_export.setDisable(false);
+            //At this point the map is not necessarily loaded, refer to eventhandler in openFile()
         }
 	}
 	
@@ -117,18 +129,43 @@ public class MainWindowController
 	
 	public void openFile(String path)
 	{
-		//The map to load in
-		map=new Map();
-		try
-		{
-			//load the map from the given path
-			map.loadMap(path);
-		}catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-		//update the image in the view.
-		setImage(map.getDrawableMap(1024,1024));
+		//Initialize an asynchronous map-load task
+		load_task = new MapLoadTask(path);
+		Thread load_thread = new Thread(load_task);
+		
+		//Create a progressbar to keep track of load progress and block actions during load
+		progress_dialog = new ProgressBarDialog(load_task, associatedStage);
+		
+		//Handle load success event
+		load_task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				//Get the result of the load task
+				map = load_task.getValue();
+				
+				//Update the image in the view
+				setImage(map.getDrawableMap(1024,1024));
+				
+				//Close the progressbar and enable export
+				progress_dialog.close();
+	            mi_export.setDisable(false); //TODO Bind a mapLoaded property instead?
+			}
+		});
+		
+		
+		//Handle failed to load event
+		load_task.setOnFailed(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				progress_dialog.close();
+				System.err.println("Failed to load .dem file");
+				//TODO Inform user of failure
+			}
+		});
+		
+		//Show progressbar and start task
+		progress_dialog.show();
+		load_thread.start();
 	}
 	
 	private void setImage(BufferedImage img)
