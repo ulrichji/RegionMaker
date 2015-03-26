@@ -13,7 +13,7 @@
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open .dem file" />
                   <MenuItem fx:id="mi_export" mnemonicParsing="false" onAction="#export" text="Export" />
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
