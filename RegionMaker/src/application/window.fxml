@@ -25,6 +25,7 @@
                     </items>
                   </Menu>
                   <MenuItem mnemonicParsing="false" onAction="#generateOceans" text="Generate oceans" />
+                  <MenuItem onAction="#openPropertiesWindow" text="Properties..."/>
                </items>
           </Menu>
         </menus>

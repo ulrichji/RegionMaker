@@ -3,6 +3,7 @@ package application;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import properties.Properties;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.WorkerStateEvent;
@@ -128,6 +129,11 @@ public class MainWindowController
 		map.generateOceans(4);//FIXME should be possible for user to specify the height of the ocean.
 		//refresh the image.
 		setImage(map.getDrawableMap(1024,1024));
+	}
+	
+	@FXML public void openPropertiesWindow()
+	{
+		Properties.showPropertiesWindow();
 	}
 	
 	public void openFile(String path)
