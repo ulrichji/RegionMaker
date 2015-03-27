@@ -5,15 +5,15 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <MenuBar prefHeight="24.0" prefWidth="600.0">
+      <MenuBar prefHeight="24.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
                   <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open .dem file" />
                   <MenuItem fx:id="mi_export" mnemonicParsing="false" onAction="#export" text="Export" />
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#close" text="Close" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
@@ -24,15 +24,15 @@
                         <CheckMenuItem fx:id="cmi_sc4" mnemonicParsing="false" onAction="#selectSC4" text="Sim City 4" />
                     </items>
                   </Menu>
-                  <MenuItem onAction="#generateOceans" mnemonicParsing="false" text="Generate oceans" />
+                  <MenuItem mnemonicParsing="false" onAction="#generateOceans" text="Generate oceans" />
                </items>
           </Menu>
         </menus>
       </MenuBar>
-      <ScrollPane fx:id="sp_scrollPane" prefHeight="600" prefWidth="1000">
+      <ScrollPane fx:id="sp_scrollPane" layoutY="24.0" prefHeight="576.0" prefWidth="1000" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
         <content>
           <AnchorPane fx:id="ap_map" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
         </content>
       </ScrollPane>
    </children>
-</VBox>
+</AnchorPane>

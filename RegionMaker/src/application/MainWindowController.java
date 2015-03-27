@@ -57,6 +57,10 @@ public class MainWindowController
 		mi_export.setDisable(true);
 	}
 	
+	@FXML private void close() {
+		associatedStage.close();
+	}
+	
 	@FXML private void selectSkylines()
 	{
 		cmi_skylines.setSelected(true);

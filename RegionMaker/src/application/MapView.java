@@ -84,11 +84,22 @@ public class MapView extends Pane
 			//if this ability is enabled.
 			if(moveMouse)
 			{
+				double mouse_x = e.getX();
+				double mouse_y = e.getY();
+				double shape_x = getWidth()-selectionShape.getImage().getWidth();
+				double shape_y = getHeight()-selectionShape.getImage().getHeight();
+				
+				//Make sure the selection cannot be outside the mapView
+				if(mouse_x > shape_x)
+					mouse_x = shape_x;
+				if(mouse_y > shape_y)
+					mouse_y = shape_y;
+				
 				//set the layout and the position of the selection.
-				selectionShape.setLayoutX(e.getX());
-				selectionShape.setLayoutY(e.getY());
-				squareX=e.getX();
-				squareY=e.getY();
+				selectionShape.setLayoutX(mouse_x);
+				selectionShape.setLayoutY(mouse_y);
+				squareX= mouse_x;
+				squareY= mouse_y;
 			}
 		}
 	}
