@@ -12,8 +12,6 @@ public class Map
 	//oppløsningen i x- ,y- , og z-retning
 	private double resx,resy,resz;
 	private int width, height;
-	//the slope of the seabed in degrees
-	private double oceanAngle=1;
 	public Map()
 	{
 	}
@@ -154,8 +152,10 @@ public class Map
 		return map;
 	}
 	//generate oceans on all points lower or equal to the seaLevel parameter
-	public void generateOceans(int seaLevel)
+	public void generateOceans(double seaLevel)
 	{
+		//since sealevel is in meters it must be converted to the z-resolution of the map
+		seaLevel/=this.getZResolution();
 		//the visited pixels
 		boolean[][] visited=new boolean[this.getWidth()][this.getHeight()];
 		//Using breath first search. A queue to store the next pixels to add.
@@ -163,7 +163,7 @@ public class Map
 		//The coordinates of the pixels.
 		int[][]map=this.getMap();
 		//the difference in height between each pixel. That is the angle of the ocean bed.
-		double steepnessfactor=(Math.tan(oceanAngle*0.0174532925)*this.getXResolution())/this.getZResolution();
+		double steepnessfactor=(Math.tan(Main.getProperties().getOceanAngle()*0.0174532925)*this.getXResolution())/this.getZResolution();
 		//loop through all the points in the map
 		for(int i=0;i<visited.length;i++)
 		{

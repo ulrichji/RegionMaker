@@ -1,12 +1,15 @@
 package properties;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 
-public class Properties
+public class Properties implements Cloneable
 {
 	private final static String propertiesPath="properties_regionMaker.txt";
 	//descriptors for parsing an writing the properties file
@@ -15,58 +18,101 @@ public class Properties
 	private final static String mapViewHeightDescriptor="MapView height";
 	private final static String seaLevelDescriptor="Sea level";
 	
-	private static double oceanAngle=30;
-	private static double mapViewWidth=1024;
-	private static double mapViewHeight=1024;
-	private static double seaLevel=4;
+	private double oceanAngle=30;
+	private double mapViewWidth=1024;
+	private double mapViewHeight=1024;
+	private  double seaLevel=4;
 	
-	public static double getSeaLevel()
+	public Properties(Properties properties)
+	{
+		this.oceanAngle=properties.getOceanAngle();
+		this.mapViewWidth=properties.getMapViewWidth();
+		this.mapViewHeight=properties.getMapViewHeight();
+		this.seaLevel=properties.getSeaLevel();
+	}
+
+	public Properties()
+	{
+	}
+
+	public double getSeaLevel()
 	{
 		return seaLevel;
 	}
 
-	public static void setSeaLevel(double seaLevel)
+	public void setSeaLevel(double seaLevel)
 	{
-		Properties.seaLevel = seaLevel;
+		this.seaLevel = seaLevel;
 	}
 	
-	public static double getOceanAngle()
+	public double getOceanAngle()
 	{
 		return oceanAngle;
 	}
 
-	public static void setOceanAngle(double oceanAngle)
+	public void setOceanAngle(double oceanAngle)
 	{
-		Properties.oceanAngle=oceanAngle;
+		this.oceanAngle=oceanAngle;
 	}
 
-	public static double getMapViewWidth()
+	public double getMapViewWidth()
 	{
 		return mapViewWidth;
 	}
 
-	public static void setMapViewWidth(double mapViewWidth)
+	public void setMapViewWidth(double mapViewWidth)
 	{
-		Properties.mapViewWidth=mapViewWidth;
+		this.mapViewWidth=mapViewWidth;
 	}
 
-	public static double getMapViewHeight()
+	public double getMapViewHeight()
 	{
 		return mapViewHeight;
 	}
 
-	public static void setMapViewHeight(double mapViewHeight)
+	public void setMapViewHeight(double mapViewHeight)
 	{
-		Properties.mapViewHeight=mapViewHeight;
+		this.mapViewHeight=mapViewHeight;
 	}
 	
-	public static void loadProperties()
+	@SuppressWarnings("resource")
+	public void loadProperties()
 	{
 		File f=new File(propertiesPath);
 		
 		if(f.exists())
 		{
 			System.out.println("Loading properties");
+			
+			try
+			{
+				BufferedReader reader=new BufferedReader(new FileReader(f));
+				String line;
+				
+				while((line=reader.readLine()) != null)
+				{
+					String identifier=line.substring(0,line.indexOf(":"));
+					String value=line.substring(line.indexOf(":")+1).trim();
+					
+					if(identifier.equals(mapViewHeightDescriptor))
+						setMapViewHeight(Double.parseDouble(value));
+					else if(identifier.equals(mapViewWidthDescriptor))
+						setMapViewWidth(Double.parseDouble(value));
+					else if(identifier.equals(oceanAngleDescriptor))
+						setOceanAngle(Double.parseDouble(value));
+					else if(identifier.equals(seaLevelDescriptor))
+						setSeaLevel(Double.parseDouble(value));
+					else
+						System.err.println("The identifier \""+identifier+"\" is unknown");
+				}
+				
+			}catch(FileNotFoundException e)
+			{
+				e.printStackTrace();
+			}catch(IOException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		else
 		{
@@ -76,7 +122,7 @@ public class Properties
 	}
 	
 	
-	private static void saveProperties()
+	public void saveProperties()
 	{
 		File f=new File(propertiesPath);
 		BufferedWriter writer=null;

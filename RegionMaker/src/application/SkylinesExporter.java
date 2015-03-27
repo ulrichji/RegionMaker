@@ -24,6 +24,7 @@ public class SkylinesExporter implements HeightmapExporter
 		this.map=map;
 		this.rectangle=selectionRectangle;
 	}
+	@Override
 	public void selectFile()
 	{
 		Stage stage=new Stage();
@@ -38,6 +39,7 @@ public class SkylinesExporter implements HeightmapExporter
             this.file=file;
         }
 	}
+	@Override
 	public void export()
 	{
 		//The pixel coordiante to the upper left corner on the map to start.
@@ -64,8 +66,8 @@ public class SkylinesExporter implements HeightmapExporter
 				if(scaleX<1 && scaleY<1)
 				{
 					//the closest pixel
-					double x=(double)i*scaleX;
-					double y=(double)u*scaleY;
+					double x=i*scaleX;
+					double y=u*scaleY;
 					//round down to get the one pixel
 					int x1=(int)(x);
 					//round up to get the pixel on the other side.
@@ -111,7 +113,7 @@ public class SkylinesExporter implements HeightmapExporter
 			for(int u=0;u<saveMap[i].length;u++)
 			{
 				//Convert the mapdata to meters and increase the height according to sealevel.
-				double value=((double)saveMap[i][u]*map.getZResolution())+seaLevel;
+				double value=(saveMap[i][u]*map.getZResolution())+seaLevel;
 				//Clipping, and high areas are set to maxValue
 				if(value>maxHeight)
 					value=maxHeight;

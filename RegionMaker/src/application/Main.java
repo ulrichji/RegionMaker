@@ -9,6 +9,14 @@ import javafx.stage.Stage;
 
 
 public class Main extends Application {
+	
+	private static Properties properties;
+	
+	public static Properties getProperties()
+	{
+		return properties;
+	}
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -19,7 +27,8 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			
-			Properties.loadProperties();
+			properties=new Properties();
+			properties.loadProperties();
 			
 			primaryStage.show();
 		} catch(Exception e) {
@@ -29,5 +38,10 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	public static void setProperties(Properties tempProperties)
+	{
+		properties=tempProperties;
 	}
 }

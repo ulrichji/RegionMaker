@@ -101,8 +101,8 @@ public class MainWindowController
 		double selectionSizeX=selection.getWidth();
 		double selectionSizeY=selection.getHeight();
 		//the x and y position of the selected area in meters.
-		double selectionX=(selection.getX()/1024)*(map.getRealWidth());
-		double selectionY=(selection.getY()/1024)*(map.getRealHeight());
+		double selectionX=(selection.getX()/(int)Main.getProperties().getMapViewWidth())*(map.getRealWidth());
+		double selectionY=(selection.getY()/(int)Main.getProperties().getMapViewHeight())*(map.getRealHeight());
 		//create a new Exporter object.
 		HeightmapExporter exporter=null;
 		switch(gameState)
@@ -126,9 +126,9 @@ public class MainWindowController
 	//generate the oceans. This should be improved.
 	@FXML public void generateOceans()
 	{
-		map.generateOceans(4);//FIXME should be possible for user to specify the height of the ocean.
+		map.generateOceans(Main.getProperties().getSeaLevel());//FIXME should be possible for user to specify the height of the ocean.
 		//refresh the image.
-		setImage(map.getDrawableMap(1024,1024));
+		setImage(map.getDrawableMap((int)Main.getProperties().getMapViewWidth(),(int)Main.getProperties().getMapViewHeight()));
 	}
 	
 	@FXML public void openPropertiesWindow()
@@ -153,8 +153,8 @@ public class MainWindowController
 				map = load_task.getValue();
 				
 				//Update the image in the view
-				setImage(map.getDrawableMap(1024,1024));
-				mapView.setSelectionShape(new SkylinesSelectionShape(map,1024,1024));
+				setImage(map.getDrawableMap((int)Main.getProperties().getMapViewWidth(),(int)Main.getProperties().getMapViewHeight()));
+				mapView.setSelectionShape(new SkylinesSelectionShape(map,(int)Main.getProperties().getMapViewWidth(),(int)Main.getProperties().getMapViewHeight()));
 				
 				//Close the progressbar and enable export
 				progress_dialog.close();
@@ -181,7 +181,7 @@ public class MainWindowController
 	private void setImage(BufferedImage img)
 	{
 		//create a new image with the dimensions. These dimensions does not represent the dimensions of the map
-		WritableImage fxImage=new WritableImage(1024,1024);
+		WritableImage fxImage=new WritableImage((int)Main.getProperties().getMapViewWidth(),(int)Main.getProperties().getMapViewHeight());
 		fxImage=SwingFXUtils.toFXImage(img,fxImage);
 		//update the image in the view.
 		mapView.setImage(fxImage);

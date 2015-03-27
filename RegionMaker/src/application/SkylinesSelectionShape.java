@@ -66,10 +66,12 @@ public class SkylinesSelectionShape extends SelectionShape
 		this.setImage(fxImage);
 	}
 	
+	@Override
 	public double getWidth()
 	{
 		return width;
 	}
+	@Override
 	public double getHeight()
 	{
 		return height;

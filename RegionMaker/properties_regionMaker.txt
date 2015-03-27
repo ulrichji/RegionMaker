@@ -1,0 +1,4 @@
+Ocean Angle: 10.0
+Sea level: 0.4
+MapView width: 1024.0
+MapView height: 1024.0

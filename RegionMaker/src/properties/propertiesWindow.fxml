@@ -4,26 +4,39 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane dividerPositions="0.3411371237458194" prefHeight="400.0" prefWidth="600.0">
-         <items>
-            <ScrollPane prefHeight="200.0" prefWidth="200.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0">
-                     <children>
-                        <ListView fx:id="lv_selectionList"/>
-                     </children>
-                  </AnchorPane>
-              </content>
-            </ScrollPane>
-            <ScrollPane prefHeight="200.0" prefWidth="200.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" fx:id="ap_selectedMenu"/>
-              </content>
-            </ScrollPane>
-         </items>
-      </SplitPane>
+      <BorderPane>
+         <center>
+            <SplitPane dividerPositions="0.3411371237458194" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <items>
+                  <ScrollPane>
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0">
+                           <children>
+                              <ListView fx:id="lv_selectionList" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+                  <ScrollPane>
+                    <content>
+                      <AnchorPane fx:id="ap_selectedMenu" minHeight="0.0" minWidth="0.0" />
+                    </content>
+                  </ScrollPane>
+               </items>
+            </SplitPane>
+         </center>
+         <bottom>
+            <ToolBar prefHeight="40.0" BorderPane.alignment="CENTER">
+              <items>
+                <Button mnemonicParsing="false" text="Apply" />
+                <Button text="OK" onAction="#applyChangesAndClose"/>
+                <Button text="Close" onAction="#closeWindow"/>
+                <Label fx:id="l_logLabel" text=""/>
+              </items>
+            </ToolBar>
+         </bottom>
+      </BorderPane>
    </children>
 </AnchorPane>
